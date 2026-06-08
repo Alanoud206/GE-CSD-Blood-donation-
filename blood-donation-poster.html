@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Drop From You… A Life For Another</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #110000;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-x: hidden;
+    padding: 40px 20px;
+  }
+
+  .poster {
+    width: 920px;
+    min-height: 1160px;
+    background: linear-gradient(155deg, #1e0000 0%, #2a0000 45%, #180000 100%);
+    border: 2px solid rgba(180,0,0,0.28);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 100px rgba(200,0,0,0.22), inset 0 0 140px rgba(0,0,0,0.55);
+    padding: 52px 56px 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .poster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.4' fill='rgba(255,255,255,0.016)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-bg {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(220,0,0,0.16) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Corner accents */
+  .corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    z-index: 1;
+  }
+  .corner.tl { top: 16px; left: 16px; border-top: 2px solid rgba(180,0,0,0.45); border-left: 2px solid rgba(180,0,0,0.45); }
+  .corner.tr { top: 16px; right: 16px; border-top: 2px solid rgba(180,0,0,0.45); border-right: 2px solid rgba(180,0,0,0.45); }
+  .corner.bl { bottom: 16px; left: 16px; border-bottom: 2px solid rgba(180,0,0,0.45); border-left: 2px solid rgba(180,0,0,0.45); }
+  .corner.br { bottom: 16px; right: 16px; border-bottom: 2px solid rgba(180,0,0,0.45); border-right: 2px solid rgba(180,0,0,0.45); }
+
+  /* Department bar */
+  .dept-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 18px;
+  }
+
+  .dept-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(180,0,0,0.35), transparent);
+  }
+
+  .dept-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,190,190,0.88);
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+
+  /* Top bar */
+  .top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 36px;
+  }
+
+  .pill {
+    border-radius: 40px;
+    padding: 6px 20px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .pill-red {
+    background: rgba(180,0,0,0.2);
+    border: 1px solid rgba(180,0,0,0.4);
+    color: rgba(255,180,180,0.8);
+  }
+
+  .pill-dim {
+    background: rgba(180,0,0,0.1);
+    border: 1px solid rgba(180,0,0,0.2);
+    color: rgba(255,180,180,0.5);
+  }
+
+  /* Drop hero */
+  .drop-container {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 30px;
+    animation: floatDrop 4s ease-in-out infinite;
+  }
+
+  @keyframes floatDrop {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+  }
+
+  .drop-svg {
+    filter: drop-shadow(0 10px 36px rgba(220,0,0,0.6)) drop-shadow(0 0 20px rgba(255,80,80,0.28));
+  }
+
+  .pulse-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 2px solid rgba(200,0,0,0.35);
+    animation: pulseRing 2.6s ease-out infinite;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .pulse-ring:nth-child(2) { animation-delay: 0.87s; }
+  .pulse-ring:nth-child(3) { animation-delay: 1.74s; }
+
+  @keyframes pulseRing {
+    0%   { transform: translate(-50%,-50%) scale(0.65); opacity: 0.6; }
+    100% { transform: translate(-50%,-50%) scale(2.3); opacity: 0; }
+  }
+
+  /* Title */
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    color: #fff;
+    text-align: center;
+    line-height: 1.18;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .title em {
+    font-style: italic;
+    color: #e8001e;
+    text-shadow: 0 0 34px rgba(232,0,30,0.55);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: rgba(255,200,200,0.45);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 36px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 32px;
+  }
+  .div-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(180,0,0,0.5), transparent);
+  }
+  .div-diamond {
+    width: 8px; height: 8px;
+    background: #c00020;
+    transform: rotate(45deg);
+    box-shadow: 0 0 8px rgba(200,0,0,0.6);
+  }
+
+  /* === BOARD === */
+  .board-section {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 30px;
+  }
+
+  .board-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .board-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,150,150,0.55);
+  }
+
+  .board-hint {
+    font-size: 11px;
+    color: rgba(255,120,120,0.35);
+    letter-spacing: 1px;
+  }
+
+  .board {
+    width: 100%;
+    height: 360px;               /* taller, clearly visible box */
+    background: rgba(0,0,0,0.45);
+    border: 2px solid rgba(200,0,0,0.45);    /* strong visible border */
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    box-shadow:
+      0 0 0 1px rgba(180,0,0,0.12),
+      inset 0 0 60px rgba(0,0,0,0.5),
+      0 4px 32px rgba(0,0,0,0.5);
+  }
+
+  /* Subtle inner glow on border */
+  .board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    box-shadow: inset 0 0 30px rgba(180,0,0,0.08);
+    pointer-events: none;
+  }
+
+  .board-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(180,0,0,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180,0,0,0.055) 1px, transparent 1px);
+    background-size: 46px 46px;
+  }
+
+  /* Empty state text */
+  .board-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .board-empty-icon {
+    font-size: 36px;
+    opacity: 0.18;
+  }
+  .board-empty-text {
+    font-size: 13px;
+    color: rgba(255,150,150,0.25);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Drop marks */
+  .mark {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transform: translate(-50%, -50%);
+    animation: markAppear 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards;
+    pointer-events: none;
+  }
+
+  @keyframes markAppear {
+    0%   { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+    70%  { transform: translate(-50%,-50%) scale(1.18); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  }
+
+  .mark-drop {
+    width: 20px;
+    height: 26px;
+    clip-path: polygon(50% 0%, 95% 55%, 78% 100%, 22% 100%, 5% 55%);
+    filter: drop-shadow(0 2px 5px rgba(200,0,0,0.65));
+    flex-shrink: 0;
+  }
+
+  .mark-name {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: rgba(255,210,210,0.88);
+    margin-top: 3px;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    background: rgba(0,0,0,0.5);
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Splash ripple */
+  .splash {
+    position: absolute;
+    pointer-events: none;
+    animation: splashAnim 0.55s ease-out forwards;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes splashAnim {
+    0%   { opacity: 0.7; transform: translate(-50%,-50%) scale(0.2); }
+    100% { opacity: 0;   transform: translate(-50%,-50%) scale(2.8); }
+  }
+
+  /* Stats */
+  .stats-bar {
+    width: 100%;
+    display: flex;
+    position: relative;
+    z-index: 2;
+    border: 1.5px solid rgba(180,0,0,0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 26px;
+  }
+
+  .stat-block {
+    flex: 1;
+    padding: 22px 16px;
+    text-align: center;
+    background: rgba(0,0,0,0.28);
+    border-right: 1px solid rgba(180,0,0,0.15);
+  }
+  .stat-block:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    color: #e8001e;
+    line-height: 1;
+    display: block;
+    text-shadow: 0 0 24px rgba(232,0,30,0.38);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,180,180,0.45);
+    margin-top: 5px;
+    display: block;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Instructions */
+  .instruction {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 18px 22px;
+    background: rgba(160,0,0,0.07);
+    border: 1px solid rgba(180,0,0,0.2);
+    border-radius: 8px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .inst-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+
+  .inst-text {
+    font-size: 14px;
+    color: rgba(255,200,200,0.65);
+    line-height: 1.65;
+  }
+  .inst-text strong {
+    color: rgba(255,210,210,0.9);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* Footer */
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 28px;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-line { flex: 1; height: 1px; background: rgba(180,0,0,0.15); }
+  .footer-text {
+    font-size: 11px;
+    color: rgba(255,180,180,0.25);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Custom cursor */
+  .cursor-drop {
+    position: fixed;
+    pointer-events: none;
+    width: 26px;
+    height: 32px;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 0 6px rgba(200,0,0,0.85));
+  }
+
+  /* Name overlay */
+  .name-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    backdrop-filter: blur(3px);
+  }
+  .name-overlay.active { opacity: 1; pointer-events: all; }
+
+  .name-box {
+    background: #1c0000;
+    border: 1.5px solid rgba(200,0,0,0.45);
+    border-radius: 12px;
+    padding: 34px 40px;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.85);
+    animation: slideUp 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    min-width: 320px;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(28px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .name-box-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: rgba(255,210,210,0.9);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .name-box-sub {
+    font-size: 12px;
+    color: rgba(255,150,150,0.45);
+    margin-bottom: 22px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .name-input {
+    width: 100%;
+    background: rgba(0,0,0,0.55);
+    border: 1.5px solid rgba(180,0,0,0.35);
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    color: #fff;
+    text-align: center;
+    outline: none;
+    display: block;
+    margin: 0 auto 18px;
+    transition: border-color 0.2s;
+  }
+  .name-input:focus { border-color: rgba(220,0,0,0.7); }
+  .name-input::placeholder { color: rgba(255,150,150,0.3); }
+
+  .name-btns { display: flex; gap: 10px; justify-content: center; }
+
+  .btn {
+    padding: 10px 26px;
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    letter-spacing: 0.3px;
+  }
+  .btn-confirm { background: #c0001a; color: #fff; }
+  .btn-confirm:hover { background: #e8001e; transform: translateY(-1px); }
+  .btn-skip { background: rgba(180,0,0,0.12); color: rgba(255,180,180,0.6); border: 1px solid rgba(180,0,0,0.22); }
+  .btn-skip:hover { background: rgba(180,0,0,0.22); }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<svg class="cursor-drop" id="cursorDrop" viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
+  <path d="M14 2 C14 2, 26 16, 26 22 C26 28.6, 20.6 34, 14 34 C7.4 34, 2 28.6, 2 22 C2 16, 14 2 Z" fill="#c0001a"/>
+  <path d="M14 6 C14 6, 23 17, 23 22 C23 25.9, 18.9 29, 14 29" fill="none" stroke="rgba(255,160,160,0.28)" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+
+<!-- Name input overlay -->
+<div class="name-overlay" id="nameOverlay">
+  <div class="name-box">
+    <div class="name-box-title">✦ Add Your Name</div>
+    <div class="name-box-sub">Optional — skip if you prefer</div>
+    <input type="text" class="name-input" id="nameInput" placeholder="Your name here…" maxlength="22"/>
+    <div class="name-btns">
+      <button class="btn btn-confirm" onclick="confirmMark()">Add My Drop</button>
+      <button class="btn btn-skip" onclick="skipName()">Skip</button>
+    </div>
+  </div>
+</div>
+
+<div class="poster" id="poster">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+  <div class="glow-bg"></div>
+
+  <!-- Department name -->
+  <div class="dept-bar">
+    <div class="dept-line"></div>
+    <span class="dept-name">GE&amp;CSD</span>
+    <div class="dept-line"></div>
+  </div>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="pill pill-red">Blood Donation Day</div>
+    <div class="pill pill-dim">14 June 2025</div>
+  </div>
+
+  <!-- Hero drop -->
+  <div class="drop-container">
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <svg class="drop-svg" width="148" height="176" viewBox="0 0 140 168" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="dg" cx="38%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="#ff4545"/>
+          <stop offset="45%" stop-color="#cc001a"/>
+          <stop offset="100%" stop-color="#6a000e"/>
+        </radialGradient>
+        <radialGradient id="sg" cx="34%" cy="26%" r="34%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.36)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <path d="M70 8 C70 8, 128 72, 128 104 C128 138, 102 160, 70 160 C38 160, 12 138, 12 104 C12 72, 70 8 Z" fill="url(#dg)"/>
+      <path d="M70 8 C70 8, 128 72, 128 104 C128 138, 102 160, 70 160 C38 160, 12 138, 12 104 C12 72, 70 8 Z" fill="url(#sg)"/>
+      <path d="M50 95 Q58 82, 70 95 Q82 108, 90 95" fill="none" stroke="rgba(255,190,190,0.2)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M42 112 Q58 88, 70 112 Q82 136, 98 112" fill="none" stroke="rgba(255,190,190,0.12)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- Title -->
+  <h1 class="title">A Drop From <em>You…</em><br>A Life For Another</h1>
+  <p class="subtitle">◈ &nbsp; Click the board below to leave your drop &nbsp; ◈</p>
+
+  <div class="divider">
+    <div class="div-line"></div>
+    <div class="div-diamond"></div>
+    <div class="div-line"></div>
+  </div>
+
+  <!-- Board -->
+  <div class="board-section">
+    <div class="board-header">
+      <span class="board-title">◈ &nbsp; Donor Wall</span>
+      <span class="board-hint">Click anywhere inside ↓</span>
+    </div>
+    <div class="board" id="board">
+      <div class="board-grid"></div>
+      <div class="board-empty" id="boardEmpty">
+        <div class="board-empty-icon">🩸</div>
+        <div class="board-empty-text">Be the first to donate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-block">
+      <span class="stat-num" id="countNum">0</span>
+      <span class="stat-label">Donors</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-num" id="namedNum">0</span>
+      <span class="stat-label">Named Drops</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-num" id="unitsNum">0</span>
+      <span class="stat-label">Est. Blood Units</span>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instruction">
+    <div class="inst-icon">🩸</div>
+    <div class="inst-text">
+      <strong>How to participate</strong>
+      Click anywhere on the Donor Wall — your drop appears instantly. Add your name if you'd like, or donate anonymously. At the end of the day, the wall is photographed and shared on the internal portal with live stats.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-line"></div>
+    <span class="footer-text">Together we save lives</span>
+    <div class="footer-line"></div>
+  </div>
+</div>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursorDrop');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.body.style.cursor = 'none';
+
+  let pendingX, pendingY;
+  let count = 0, namedCount = 0;
+
+  const board     = document.getElementById('board');
+  const overlay   = document.getElementById('nameOverlay');
+  const nameInput = document.getElementById('nameInput');
+  const boardEmpty = document.getElementById('boardEmpty');
+  const countNum  = document.getElementById('countNum');
+  const namedNum  = document.getElementById('namedNum');
+  const unitsNum  = document.getElementById('unitsNum');
+
+  board.addEventListener('click', e => {
+    const r = board.getBoundingClientRect();
+    pendingX = (e.clientX - r.left) / r.width * 100;
+    pendingY = (e.clientY - r.top)  / r.height * 100;
+    addSplash(e.clientX - r.left, e.clientY - r.top);
+    nameInput.value = '';
+    overlay.classList.add('active');
+    setTimeout(() => nameInput.focus(), 80);
+  });
+
+  function addSplash(x, y) {
+    const s = document.createElement('div');
+    s.className = 'splash';
+    s.style.left = x + 'px';
+    s.style.top  = y + 'px';
+    s.innerHTML = `<svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="none" stroke="rgba(210,0,30,0.5)" stroke-width="2.5"/></svg>`;
+    board.appendChild(s);
+    setTimeout(() => s.remove(), 650);
+  }
+
+  function placeMark(name) {
+    boardEmpty.style.opacity = '0';
+
+    const mark = document.createElement('div');
+    mark.className = 'mark';
+    mark.style.left = pendingX + '%';
+    mark.style.top  = pendingY + '%';
+
+    const d = document.createElement('div');
+    d.className = 'mark-drop';
+    const r = (155 + Math.random() * 75) | 0;
+    d.style.background = `radial-gradient(ellipse at 38% 32%, rgba(255,130,130,0.38) 0%, rgb(${r},0,24) 58%, rgb(${r-45},0,8) 100%)`;
+    mark.appendChild(d);
+
+    if (name) {
+      const n = document.createElement('div');
+      n.className = 'mark-name';
+      n.textContent = name;
+      mark.appendChild(n);
+      namedCount++;
+      namedNum.textContent = namedCount;
+    }
+
+    board.appendChild(mark);
+    count++;
+    countNum.textContent = count;
+    const units = (count * 0.45);
+    unitsNum.textContent = units % 1 === 0 ? units : units.toFixed(1);
+
+    countNum.style.transform = 'scale(1.35)';
+    setTimeout(() => countNum.style.transform = '', 220);
+  }
+
+  function confirmMark() {
+    overlay.classList.remove('active');
+    placeMark(nameInput.value.trim());
+  }
+
+  function skipName() {
+    overlay.classList.remove('active');
+    placeMark('');
+  }
+
+  nameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmMark();
+    if (e.key === 'Escape') skipName();
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) skipName();
+  });
+</script>
+</body>
+</html>
